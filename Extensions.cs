@@ -7,20 +7,20 @@ namespace Catalog
         public static ItemDto AsDto(this Item item){
             return new ItemDto
             {
-                Id = Guid.NewGuid(),
+                Id = item.Id,
                 Name = item.Name,
                 Price = item.Price, 
-                CreatedDate = DateTimeOffset.UtcNow
+                CreatedDate = item.CreatedDate
             };
         }
 
         public static Item AsNonDto(this ItemDto itemDto){
             return new Item
             {
-                Id = Guid.NewGuid(),
+                Id = itemDto.Id,
                 Name = itemDto.Name,
                 Price = itemDto.Price,
-                CreatedDate = DateTimeOffset.UtcNow
+                CreatedDate = itemDto.CreatedDate
             };
         }
     }
