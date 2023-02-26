@@ -1,7 +1,24 @@
 using Catalog.Repositories;
+using MongoDB.Driver;
+using Catalog.Settings;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<IItemsRepository, InMemItemsRepository>();
+
+BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
+
+builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var settings = configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
+    return new MongoClient(settings.ConnectionString);
+});
+
+
+builder.Services.AddSingleton<IItemsRepository, MongoDbItemsRepository>();
 // Add services to the container.
 
 builder.Services.AddControllers();
