@@ -12,6 +12,7 @@ namespace Catalog.Settings
             {
                 return $"mongodb://{User}:{Password}@{Host}:{Port}";
             }
+
         }
     }
 }
